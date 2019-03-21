@@ -1,96 +1,61 @@
-# Homework 2 (Style-Transfer)
-
-## Assign
-
-1.  10% (Training MUNIT)
-2.  20% (Inference one image in multiple style)
-3.  20% (Compare with other method)
-4.  30% (Assistant) 
-5.  20% (Mutual evaluation)
-
-reference:
-
-[FastPhotoStyle](https://github.com/NVIDIA/FastPhotoStyle)
-
-[neural-style](https://github.com/anishathalye/neural-style)
-
-[DRIT](https://github.com/HsinYingLee/DRIT)
+# Homework 1 (Color-Transfer and Texture-Transfer)
 
 
+## Training MUNIT
+Under the limit of time and space constraint, we train MUNIT on `summer2winter_yosemite`  dataset only with batch size `1` and `200000` iterations. All the images are trained and tested under resolution of `256x256`.
 
-### Code usage
-
-```
-conda install pytorch=0.4.1 torchvision cuda91 -c pytorch;
-conda install -y -c anaconda pip;
-conda install -y -c anaconda pyyaml;
-pip install tensorboard tensorboardX;
-```
-
-## Training
-### 1. Download dataset
-
-- `bash scripts/demo_train_edges2handbags.sh`  
-- `bash scripts/demo_train_edges2shoes.sh` 
-- `bash scripts/demo_train_summer2winter_yosemite256.sh` 
-
-If you can not use ```axel``` command, change it to ```wget```.
-
-```
-axel -n 1 https://people.eecs.berkeley.edu/~taesung_park/CycleGAN/datasets/summer2winter_yosemite.zip --output=datasets/summer2winter_yosemite256/summer2winter_yosemite.zip
-```
-to
-
-```
-wget -N  https://people.eecs.berkeley.edu/~taesung_park/CycleGAN/datasets/summer2winter_yosemite.zip -O datasets/summer2winter_yosemite256/summer2winter_yosemite.zip
-```
-
-### 2. Train
-Check out ```configs/demo_edges2handbags_folder.yaml``` for folder-based dataset organization. 
-
-```
-python train.py --config configs/edges2handbags_folder.yaml
-```
+The training loss is depicted as below figure:
+| Discriminator Loss | Generator Loss |
+| :--: | :--: |
+| ![](demo/Dloss.png) | ![](demo/Gloss.png) |
 
 
+## Inference one image in multiple styl
+Some result of the trained model are shown in below:
 
-## Testing
+**Summer to Winter**
 
-The pre-trained file is on [model](https://drive.google.com/drive/folders/10IEa7gibOWmQQuJUIUOkh-CV4cm6k8__?usp=sharing) Download the file and save it on  ```models/edges2shoes.pt```
-
-Run the following command to translate edges to shoes
-
-    python test.py --config configs/edges2shoes_folder.yaml --input inputs/edges2shoes_edge.jpg --output_folder results/edges2shoes --checkpoint models/edges2shoes.pt --a2b 1
-    
-The results are stored in `results/edges2shoes` folder. By default, it produces 10 random translation outputs.
-
+| Input (summer) | Output (winter) |
+| :------------: | :-------------: |
+| ![](demo/s2w/i1.jpg) | ![](demo/s2w/o1.jpg) |
+| ![](demo/s2w/i2.jpg) | ![](demo/s2w/o2.jpg) |
+| ![](demo/s2w/i3.jpg) | ![](demo/s2w/o3.jpg) |
+| ![](demo/s2w/i4.jpg) | ![](demo/s2w/o4.jpg) |
 
 
-### Results Video
+**Winter to Summer**
 
-This result is from original Github.
-[![](results/video.jpg)](https://youtu.be/ab64TWzWn40)
+| Input (winter) | Output (summer) |
+| :------------: | :-------------: |
+| ![](demo/w2s/i1.jpg) | ![](demo/w2s/o1.jpg) |
+| ![](demo/w2s/i2.jpg) | ![](demo/w2s/o2.jpg) |
+| ![](demo/w2s/i3.jpg) | ![](demo/w2s/o3.jpg) |
+| ![](demo/w2s/i4.jpg) | ![](demo/w2s/o4.jpg) |
 
-### Edges to Shoes/handbags Translation
 
-![](results/edges2shoes_handbags.jpg)
+**Result of each content style combination**
 
-### Animal Image Translation
+| Summer Content <br> Winter Style | ![](demo/grid1/w1.jpg) | ![](demo/grid1/w2.jpg) | ![](demo/grid1/w3.jpg) |
+| :------------: | :-------------: | :------------: | :-------------: |
+| ![](demo/grid1/s1.jpg) | ![](demo/grid1/sw11.jpg) | ![](demo/grid1/sw12.jpg) | ![](demo/grid1/sw13.jpg) |
+| ![](demo/grid1/s2.jpg) | ![](demo/grid1/sw21.jpg) | ![](demo/grid1/sw22.jpg) | ![](demo/grid1/sw23.jpg) |
+| ![](demo/grid1/s3.jpg) | ![](demo/grid1/sw31.jpg) | ![](demo/grid1/sw32.jpg) | ![](demo/grid1/sw33.jpg) |
 
-![](results/animal.jpg)
+| Winter Content <br> Summer Style | ![](demo/grid1/s1.jpg) | ![](demo/grid1/s2.jpg) | ![](demo/grid1/s3.jpg) |
+| :------------: | :-------------: | :------------: | :-------------: |
+| ![](demo/grid1/w1.jpg) | ![](demo/grid1/ws11.jpg) | ![](demo/grid1/ws12.jpg) | ![](demo/grid1/ws13.jpg) |
+| ![](demo/grid1/w2.jpg) | ![](demo/grid1/ws21.jpg) | ![](demo/grid1/ws22.jpg) | ![](demo/grid1/ws23.jpg) |
+| ![](demo/grid1/w3.jpg) | ![](demo/grid1/ws31.jpg) | ![](demo/grid1/ws32.jpg) | ![](demo/grid1/ws33.jpg) |
 
-### Street Scene Translation
 
-![](results/street.jpg)
+The result shown above is already convince us that the model is capable of transfering style and content between given two images. However, we do observe some failure result like:
 
-### Yosemite Summer to Winter Translation (HD)
+| ![](demo/failure/f1.jpg) | ![](demo/failure/f2.jpg) | ![](demo/failure/f3.jpg) |
 
-![](results/summer2winter_yosemite.jpg)
+Some possible reasons:
+- Our training time is not enough
+- The random sampled style image is not suitable for the content
 
-### Example-guided Image Translation
 
-![](results/example_guided.jpg)
-
-## Acknowledgments
-Code is from [MUNIT](https://github.com/NVlabs/MUNIT). All credit goes to the authors of [MUNIT](https://arxiv.org/abs/1804.04732), Xun Huang, Ming-Yu Liu, Serge Belongie, Jan Kautz.
+## Compare with other method
 
