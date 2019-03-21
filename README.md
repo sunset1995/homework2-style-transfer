@@ -58,4 +58,18 @@ Some possible reasons:
 
 
 ## Compare with other method
+We show some result of neural style transfer with ImageNet pretrained vgg19 directly applied on the dataset we use.
 
+| Summer Content <br> Winter Style | ![](demo/grid1/w1.jpg) | ![](demo/grid1/w2.jpg) | ![](demo/grid1/w3.jpg) |
+| :------------: | :-------------: | :------------: | :-------------: |
+| ![](demo/grid1/s1.jpg) | ![](demo/ns_sw11.jpg) | ![](demo/ns_sw12.jpg) | ![](demo/ns_sw13.jpg) |
+| ![](demo/grid1/s2.jpg) | ![](demo/ns_sw21.jpg) | ![](demo/ns_sw22.jpg) | ![](demo/ns_sw23.jpg) |
+| ![](demo/grid1/s3.jpg) | ![](demo/ns_sw31.jpg) | ![](demo/ns_sw32.jpg) | ![](demo/ns_sw33.jpg) |
+
+| Winter Content <br> Summer Style | ![](demo/grid1/s1.jpg) | ![](demo/grid1/s2.jpg) | ![](demo/grid1/s3.jpg) |
+| :------------: | :-------------: | :------------: | :-------------: |
+| ![](demo/grid1/w1.jpg) | ![](demo/ns_ws11.jpg) | ![](demo/ns_ws12.jpg) | ![](demo/ns_ws13.jpg) |
+| ![](demo/grid1/w2.jpg) | ![](demo/ns_ws21.jpg) | ![](demo/ns_ws22.jpg) | ![](demo/ns_ws23.jpg) |
+| ![](demo/grid1/w3.jpg) | ![](demo/ns_ws31.jpg) | ![](demo/ns_ws32.jpg) | ![](demo/ns_ws33.jpg) |
+
+As the model is only pre-trained on ImageNet, the result is not as well as expected with artist painting like result. A clever choice for such pre-trianed setting is to use artist style to another arthis style transfer while realistic scene is not a good choice for such setting.
